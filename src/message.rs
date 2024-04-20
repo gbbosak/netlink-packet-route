@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 
 use crate::{
-    address::{AddressHeader, AddressMessage, AddressMessageBuffer},
+    address::{
+        AddressError, AddressHeader, AddressMessage, AddressMessageBuffer,
+    },
     link::{LinkMessage, LinkMessageBuffer},
     neighbour::{NeighbourMessage, NeighbourMessageBuffer},
     neighbour_table::{NeighbourTableMessage, NeighbourTableMessageBuffer},
@@ -88,7 +90,7 @@ pub enum RouteNetlinkMessageParseError {
     InvalidRouteMessage(#[source] DecodeError),
 
     #[error("Invalid addr message")]
-    InvalidAddrMessage(#[source] DecodeError),
+    InvalidAddrMessage(#[source] AddressError),
 
     #[error("Invalid prefix message")]
     InvalidPrefixMessage(#[source] DecodeError),
@@ -172,7 +174,7 @@ impl<'a, T: AsRef<[u8]> + ?Sized>
                             msg.header.family = buf.inner()[0].into();
                             msg
                         } else {
-                            return Err(RouteNetlinkMessageParseError::InvalidAddrMessage(e));
+                            return Err(RouteNetlinkMessageParseError::InvalidAddrMessage(AddressError::FailedBufferInit(e)));
                         }
                     }
                 };
