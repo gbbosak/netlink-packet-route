@@ -32,7 +32,6 @@ pub struct NeighbourTableHeader {
 impl<T: AsRef<[u8]>> Parseable<NeighbourTableMessageBuffer<T>>
     for NeighbourTableHeader
 {
-    type Error = DecodeError;
     fn parse(
         buf: &NeighbourTableMessageBuffer<T>,
     ) -> Result<Self, DecodeError> {

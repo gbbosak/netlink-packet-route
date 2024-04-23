@@ -23,7 +23,6 @@ pub(crate) struct VecLinkVfInfo(pub(crate) Vec<LinkVfInfo>);
 impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
     for VecLinkVfInfo
 {
-    type Error = DecodeError;
     fn parse(buf: &NlaBuffer<&'a T>) -> Result<Self, DecodeError> {
         let mut nlas = vec![];
         for nla in NlasIterator::new(buf.into_inner()) {
@@ -63,7 +62,6 @@ impl Nla for LinkVfInfo {
 }
 
 impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>> for LinkVfInfo {
-    type Error = DecodeError;
     fn parse(buf: &NlaBuffer<&'a T>) -> Result<Self, DecodeError> {
         let mut nlas = vec![];
         for nla in NlasIterator::new(buf.into_inner()) {
@@ -170,7 +168,6 @@ impl Nla for VfInfo {
 }
 
 impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>> for VfInfo {
-    type Error = DecodeError;
     fn parse(buf: &NlaBuffer<&'a T>) -> Result<Self, DecodeError> {
         let payload = buf.value();
         Ok(match buf.kind() {

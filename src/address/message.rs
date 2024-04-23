@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 
-use crate::{
-    address::{
-        AddressAttribute, AddressError, AddressHeaderFlags, AddressScope,
-    },
-    AddressFamily,
-};
+use anyhow::Context;
 use netlink_packet_utils::{
     nla::{NlaBuffer, NlasIterator},
     traits::{Emitable, Parseable},
     DecodeError,
+};
+
+use crate::{
+    address::{AddressAttribute, AddressHeaderFlags, AddressScope},
+    AddressFamily,
 };
 
 const ADDRESS_HEADER_LEN: usize = 8;
@@ -76,8 +76,7 @@ impl Emitable for AddressMessage {
 }
 
 impl<T: AsRef<[u8]>> Parseable<AddressMessageBuffer<T>> for AddressHeader {
-    type Error = ();
-    fn parse(buf: &AddressMessageBuffer<T>) -> Result<Self, ()> {
+    fn parse(buf: &AddressMessageBuffer<T>) -> Result<Self, DecodeError> {
         Ok(Self {
             family: buf.family().into(),
             prefix_len: buf.prefix_len(),
@@ -91,12 +90,12 @@ impl<T: AsRef<[u8]>> Parseable<AddressMessageBuffer<T>> for AddressHeader {
 impl<'a, T: AsRef<[u8]> + 'a> Parseable<AddressMessageBuffer<&'a T>>
     for AddressMessage
 {
-    type Error = AddressError;
-    fn parse(buf: &AddressMessageBuffer<&'a T>) -> Result<Self, AddressError> {
+    fn parse(buf: &AddressMessageBuffer<&'a T>) -> Result<Self, DecodeError> {
         Ok(AddressMessage {
-            // ok to unwrap, we never fail parsing the header.
-            header: AddressHeader::parse(buf).unwrap(),
-            attributes: Vec::<AddressAttribute>::parse(buf)?,
+            header: AddressHeader::parse(buf)
+                .context("failed to parse address message header")?,
+            attributes: Vec::<AddressAttribute>::parse(buf)
+                .context("failed to parse address message NLAs")?,
         })
     }
 }
@@ -104,13 +103,10 @@ impl<'a, T: AsRef<[u8]> + 'a> Parseable<AddressMessageBuffer<&'a T>>
 impl<'a, T: AsRef<[u8]> + 'a> Parseable<AddressMessageBuffer<&'a T>>
     for Vec<AddressAttribute>
 {
-    type Error = AddressError;
-    fn parse(buf: &AddressMessageBuffer<&'a T>) -> Result<Self, AddressError> {
+    fn parse(buf: &AddressMessageBuffer<&'a T>) -> Result<Self, DecodeError> {
         let mut attributes = vec![];
         for nla_buf in buf.attributes() {
-            attributes.push(AddressAttribute::parse(
-                &nla_buf.map_err(AddressError::FailedBufferInit)?,
-            )?);
+            attributes.push(AddressAttribute::parse(&nla_buf?)?);
         }
         Ok(attributes)
     }

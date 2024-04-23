@@ -37,7 +37,6 @@ impl TcMessage {
 }
 
 impl<'a, T: AsRef<[u8]> + 'a> Parseable<TcMessageBuffer<&'a T>> for TcMessage {
-    type Error = DecodeError;
     fn parse(buf: &TcMessageBuffer<&'a T>) -> Result<Self, DecodeError> {
         Ok(Self {
             header: TcHeader::parse(buf)
@@ -51,7 +50,6 @@ impl<'a, T: AsRef<[u8]> + 'a> Parseable<TcMessageBuffer<&'a T>> for TcMessage {
 impl<'a, T: AsRef<[u8]> + 'a> Parseable<TcMessageBuffer<&'a T>>
     for Vec<TcAttribute>
 {
-    type Error = DecodeError;
     fn parse(buf: &TcMessageBuffer<&'a T>) -> Result<Self, DecodeError> {
         let mut attributes = vec![];
         let mut kind = String::new();

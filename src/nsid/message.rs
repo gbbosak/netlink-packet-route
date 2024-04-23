@@ -18,7 +18,6 @@ pub struct NsidMessage {
 impl<'a, T: AsRef<[u8]> + 'a> Parseable<NsidMessageBuffer<&'a T>>
     for NsidMessage
 {
-    type Error = DecodeError;
     fn parse(buf: &NsidMessageBuffer<&'a T>) -> Result<Self, DecodeError> {
         Ok(Self {
             header: NsidHeader::parse(buf)
@@ -32,7 +31,6 @@ impl<'a, T: AsRef<[u8]> + 'a> Parseable<NsidMessageBuffer<&'a T>>
 impl<'a, T: AsRef<[u8]> + 'a> Parseable<NsidMessageBuffer<&'a T>>
     for Vec<NsidAttribute>
 {
-    type Error = DecodeError;
     fn parse(buf: &NsidMessageBuffer<&'a T>) -> Result<Self, DecodeError> {
         let mut attributes = vec![];
         for nla_buf in buf.attributes() {

@@ -64,7 +64,6 @@ impl RouteHeader {
 impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<RouteMessageBuffer<&'a T>>
     for RouteHeader
 {
-    type Error = DecodeError;
     fn parse(buf: &RouteMessageBuffer<&'a T>) -> Result<Self, DecodeError> {
         Ok(RouteHeader {
             address_family: buf.address_family().into(),
@@ -247,7 +246,6 @@ impl Default for RouteProtocol {
 }
 
 impl Parseable<[u8]> for RouteProtocol {
-    type Error = DecodeError;
     fn parse(buf: &[u8]) -> Result<Self, DecodeError> {
         if buf.len() == 1 {
             Ok(Self::from(buf[0]))

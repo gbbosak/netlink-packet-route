@@ -31,7 +31,6 @@ impl Emitable for LinkXstats {
 impl<'a, T: AsRef<[u8]> + ?Sized>
     ParseableParametrized<NlaBuffer<&'a T>, &InfoKind> for LinkXstats
 {
-    type Error = DecodeError;
     fn parse_with_param(
         buf: &NlaBuffer<&'a T>,
         _kind: &InfoKind,

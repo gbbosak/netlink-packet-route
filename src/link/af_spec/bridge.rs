@@ -52,7 +52,6 @@ impl nla::Nla for AfSpecBridge {
 }
 
 impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>> for AfSpecBridge {
-    type Error = DecodeError;
     fn parse(buf: &NlaBuffer<&'a T>) -> Result<Self, DecodeError> {
         use self::AfSpecBridge::*;
 
@@ -81,7 +80,6 @@ pub(crate) struct VecAfSpecBridge(pub(crate) Vec<AfSpecBridge>);
 impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
     for VecAfSpecBridge
 {
-    type Error = DecodeError;
     fn parse(buf: &NlaBuffer<&'a T>) -> Result<Self, DecodeError> {
         let mut nlas = vec![];
         let err = "Invalid AF_INET NLA for IFLA_AF_SPEC(AF_BRIDGE)";

@@ -35,7 +35,6 @@ impl<'a, T> ParseableParametrized<NlaBuffer<&'a T>, &str> for TcXstats
 where
     T: AsRef<[u8]> + ?Sized,
 {
-    type Error = DecodeError;
     fn parse_with_param(
         buf: &NlaBuffer<&'a T>,
         kind: &str,

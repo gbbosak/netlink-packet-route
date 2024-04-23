@@ -41,7 +41,6 @@ impl Nla for VfVlan {
 }
 
 impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>> for VfVlan {
-    type Error = DecodeError;
     fn parse(buf: &NlaBuffer<&'a T>) -> Result<Self, DecodeError> {
         let payload = buf.value();
         Ok(match buf.kind() {
@@ -94,7 +93,6 @@ buffer!(VfVlanInfoBuffer(VF_VLAN_INFO_LEN) {
 impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<VfVlanInfoBuffer<&'a T>>
     for VfVlanInfo
 {
-    type Error = DecodeError;
     fn parse(buf: &VfVlanInfoBuffer<&T>) -> Result<Self, DecodeError> {
         Ok(Self {
             vf_id: buf.vf_id(),

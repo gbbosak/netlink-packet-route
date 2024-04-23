@@ -135,7 +135,6 @@ impl Nla for NeighbourTableParameter {
 impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
     for NeighbourTableParameter
 {
-    type Error = DecodeError;
     fn parse(buf: &NlaBuffer<&'a T>) -> Result<Self, DecodeError> {
         let payload = buf.value();
         Ok(match buf.kind() {
@@ -234,7 +233,6 @@ pub(crate) struct VecNeighbourTableParameter(
 impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
     for VecNeighbourTableParameter
 {
-    type Error = DecodeError;
     fn parse(buf: &NlaBuffer<&'a T>) -> Result<Self, DecodeError> {
         let mut nlas = vec![];
         let err = "invalid NDTA_PARMS attribute";

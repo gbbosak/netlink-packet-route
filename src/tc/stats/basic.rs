@@ -24,7 +24,6 @@ buffer!(TcStatsBasicBuffer(STATS_BASIC_LEN) {
 });
 
 impl<T: AsRef<[u8]>> Parseable<TcStatsBasicBuffer<T>> for TcStatsBasic {
-    type Error = DecodeError;
     fn parse(buf: &TcStatsBasicBuffer<T>) -> Result<Self, DecodeError> {
         Ok(TcStatsBasic {
             bytes: buf.bytes(),

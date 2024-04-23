@@ -50,7 +50,6 @@ impl Nla for InfoXfrm {
 }
 
 impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>> for InfoXfrm {
-    type Error = DecodeError;
     fn parse(buf: &NlaBuffer<&'a T>) -> Result<Self, DecodeError> {
         use self::InfoXfrm::*;
         let payload = buf.value();
