@@ -46,3 +46,9 @@ pub enum RouteError {
     #[error(transparent)]
     Other(#[from] DecodeError),
 }
+
+impl From<RouteError> for DecodeError {
+    fn from(err: RouteError) -> Self {
+        DecodeError::Other(err.into())
+    }
+}

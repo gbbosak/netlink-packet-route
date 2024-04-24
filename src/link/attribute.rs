@@ -14,7 +14,7 @@ use netlink_packet_utils::{
 #[cfg(any(target_os = "linux", target_os = "fuchsia",))]
 use super::af_spec::VecAfSpecBridge;
 #[cfg(any(target_os = "linux", target_os = "fuchsia",))]
-use super::proto_info::VecanhowLinkProtoInfoBridge;
+use super::proto_info::VecLinkProtoInfoBridge;
 use super::{
     af_spec::VecAfSpecUnspec,
     buffer_tool::expand_buffer_if_small,
