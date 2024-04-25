@@ -119,6 +119,12 @@ pub enum RouteNetlinkMessageParseError {
     ParseBuffer(#[source] DecodeError),
 }
 
+impl From<RouteNetlinkMessageParseError> for DecodeError {
+    fn from(e: RouteNetlinkMessageParseError) -> Self {
+        DecodeError::Other(e.into())
+    }
+}
+
 impl<'a, T: AsRef<[u8]> + ?Sized>
     ParseableParametrized<RouteNetlinkMessageBuffer<&'a T>, u16>
     for RouteNetlinkMessage
